@@ -13,23 +13,6 @@ type header struct {
 	size       int64
 }
 
-func newHeader(data []byte) *header {
-	h := &header{}
-
-	prop := int(data[0])
-	h.properties = Properties{}
-	h.properties.PB = prop / (9 * 5)
-	prop -= h.properties.PB * 9 * 5
-	h.properties.LP = prop / 9
-	h.properties.LC = prop - h.properties.LP*9
-
-	h.dictCap = int(binary.LittleEndian.Uint32(data[1:]))
-
-	h.size = int64(binary.LittleEndian.Uint64(data[5:]))
-
-	return h
-}
-
 func (h *header) marshalBinary() ([]byte, error) {
 	if err := h.properties.verify(); err != nil {
 		return nil, err

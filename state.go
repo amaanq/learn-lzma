@@ -19,18 +19,24 @@ type state struct {
 	Properties  Properties
 }
 
+func initProbSlice(p []prob) {
+	for i := range p {
+		p[i] = probInit
+	}
+}
+
 func (s *state) Reset() {
 	p := s.Properties
 	*s = state{
 		Properties: p,
 		posBitMask: (uint32(1) << uint(p.PB)) - 1,
 	}
-	initProbSlice(s.isMatch)
-	initProbSlice(s.isRep)
-	initProbSlice(s.isRepG0)
-	initProbSlice(s.isRepG1)
-	initProbSlice(s.isRepG2)
-	initProbSlice(s.isRepG0Long)
+	initProbSlice(s.isMatch[:])
+	initProbSlice(s.isRep[:])
+	initProbSlice(s.isRepG0[:])
+	initProbSlice(s.isRepG1[:])
+	initProbSlice(s.isRepG2[:])
+	initProbSlice(s.isRepG0Long[:])
 	s.litCodec.init(p.LC, p.LP)
 	s.lenCodec.init()
 	s.repLenCodec.init()

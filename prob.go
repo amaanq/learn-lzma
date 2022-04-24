@@ -4,6 +4,8 @@ const movebits = 5
 
 const probbits = 11
 
+const probInit prob = 1 << (probbits - 1)
+
 type prob uint16
 
 func (p *prob) dec() {
