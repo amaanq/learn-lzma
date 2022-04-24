@@ -54,6 +54,15 @@ func (e *rangeEncoder) EncodeBit(b uint32, p *prob) error {
 	return e.shiftLow()
 }
 
+func (e *rangeEncoder) Close() error {
+	for i := 0; i < 5; i++ {
+		if err := e.shiftLow(); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func (e *rangeEncoder) shiftLow() error {
 	if uint32(e.low) < 0xff000000 || (e.low>>32) != 0 {
 		tmp := e.cache

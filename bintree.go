@@ -99,6 +99,20 @@ func (t *binTree) add(v uint32) {
 	}
 }
 
+func (t *binTree) parent(v uint32) (uint32, *uint32) {
+	if t.root == v {
+		return null, &t.root
+	}
+	p := t.node[v].p
+	var ptr *uint32
+	if t.node[p].l == v {
+		ptr = &t.node[p].l
+	} else {
+		ptr = &t.node[p].r
+	}
+	return p, ptr
+}
+
 func (t *binTree) remove(v uint32) {
 	vn := &t.node[v]
 	p, ptr := t.parent(v)
@@ -146,6 +160,65 @@ func (t *binTree) remove(v uint32) {
 	t.node[r].p = u
 	*ptr = u
 	un.p = p
+}
+
+func (t *binTree) search(v uint32, x uint32) (uint32, uint32) {
+	a, b := null, null
+	if v == null {
+		return a, b
+	}
+	for {
+		vn := &t.node[v]
+		if x <= vn.x {
+			if x == vn.x {
+				return v, v
+			}
+			b = v
+			if vn.l == null {
+				return a, b
+			}
+			v = vn.l
+		} else {
+			a = v
+			if vn.r == null {
+				return a, b
+			}
+			v = vn.r
+		}
+	}
+}
+
+func (t *binTree) max(v uint32) uint32 {
+	if v == null {
+		return null
+	}
+	for {
+		r := t.node[v].r
+		if r == null {
+			return v
+		}
+		v = r
+	}
+}
+
+func (t *binTree) pred(v uint32) uint32 {
+	if v == null {
+		return null
+	}
+	u := t.max(t.node[v].l)
+	if u != null {
+		return u
+	}
+	for {
+		p := t.node[v].p
+		if p == null {
+			return null
+		}
+		if t.node[p].r == v {
+			return p
+		}
+		v = p
+	}
 }
 
 func xval(a []byte) uint32 {

@@ -185,6 +185,9 @@ func (e *encoder) compress(flags compressFlags) error {
 	return nil
 }
 
+var eosMatch = match{distance: maxDistance, n: minMatchLen}
+
+
 func (e *encoder) Close() error {
 	err := e.compress(all)
 	if err != nil && err != ErrLimit {
